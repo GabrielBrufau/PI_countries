@@ -1,5 +1,6 @@
 const express = require('express');
 const server = express();
+require('./utils/relations.js');
 
 server.use(express.json());     //lee json
 server.use(express.urlencoded({extended:true})); //lee json post put

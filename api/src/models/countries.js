@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize');
 const {conn} = require('../utils/db.js');
-
+console.log('#console conn',conn);
 const Countries = conn.define('countries',{
     id: { 
-      type: Sequelize.INTEGER,
-      autoIncrement:true,
+      type: Sequelize.STRING,
       primaryKey: true,
       allowNull: false,      
     },  

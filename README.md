@@ -1,338 +1,172 @@
-*init*
-- 
-- in `mkdir src`
-- run `npm init -y` `npm i express pg sequelize axios`
+<p align='left'>
+    <img src='https://static.wixstatic.com/media/85087f_0d84cbeaeb824fca8f7ff18d7c9eaafd~mv2.png/v1/fill/w_160,h_30,al_c,q_85,usm_0.66_1.00_0.01/Logo_completo_Color_1PNG.webp' </img>
+</p>
 
-*created src/ index.js  app.js utils/db.js*
-- `mkdir src | cd src | touch index.js app.js | mkdir utils | cd utils | touch db.js`
-- in src/index.js white
-```js
-const server = require('./app.js');
-const conn = require('./db.js');
+# Individual Project - Henry Countries
 
-conn.sync({force:false}).then(()=>{
-	server.listen(3001,()=>{
-		console.log(`listening at 3001`);
-		})
-		});
-```
-- in src/app.js white
-```js
-const express = require('express');
-const server = express();
+<p align="left">
+  <img height="200" src="./countries.png" />
+</p>
 
-server.use(express.json());	//lee json
-server.use(express.urlencoded({extended:true}); //lee json post put
-server.use((req,res,next)=>{
-		res.setHeader('Access-Control-Allow-Origin','*');
-		res.setHeader('Access-Control-Allow-Methods','GET','POST','PUT','DELETE');
-		next();
-		});
+## Objetivos del Proyecto
 
-module.exports = server
-```
-- in src/utils/db.js white
-```js
-const Sequelize = require('sequelize');
+- Construir una App utlizando React, Redux, Node y Sequelize.
+- Afirmar y conectar los conceptos aprendidos en la carrera.
+- Aprender mejores prácticas.
+- Aprender y practicar el workflow de GIT.
+- Usar y practicar testing.
 
-const sequelize = new Sequelize(
-	process.env.DB_NAME,
-	process.env.DB_USER,
-	process.env.DB_PASSWORD,
-	{
-		host:process.env.DB_HOST,
-		dialect:"postgres"
-	}
-);
+## Horarios y Fechas
 
-module.exports = {conn:sequelize};
-```
+El proyecto tendrá una duración máxima de tres semanas. En el caso de que completan todas las tareas antes de dicho lapso podrán avisar a su Instructor para coordinar una fecha de presentación del trabajo (DEMO).
 
-*creatd controllers routes models Dokerfile .dockerignore docker-compose.yml*
-- in /PI_contries `touch Dockerfile .dockerignore docker-compose.yml`
-- in /PI_contries/src `mkdir routes controllers models`
-- in /PI_contries/src/routes `touch index.js activity.js countries.js`
-- in /PI_countrie/src/controllers `touch activity.js countries.js`
-- in /PI_countrie/src/models `touch activity.js countries.js`
+## Comenzando
 
-- in /PI_countries/Dockerfile
-```Dockerfile
-ROM node:12-alpine
+ 1. Forkear el repositorio para tener una copia del mismo en sus cuentas
+ 2. Clonar el repositorio en sus computadoras para comenzar a trabajar
 
-WORKDIR /src
+Tendrán un `boilerplate` con la estructura general tanto del servidor como de cliente.
 
-COPY package.json package-lock*.json ./
+__IMPORTANTE:__ Es necesario contar minimamente con la última versión estable de Node y NPM. Asegurarse de contar con ella para poder instalar correctamente las dependecias necesarias para correr el proyecto.
 
-RUN npm install
+Actualmente las versiónes necesarias son:
 
-COPY . .
+ * __Node__: 12.18.3 o mayor
+ * __NPM__: 6.14.16 o mayor
 
-EXPOSE 3001
+Para verificar que versión tienen instalada:
 
-CMD ["node","src/index.js"]
-```
+> node -v
+>
+> npm -v
 
-- in /PI_countries/.dockerignore
-```.dockerignore
-node_modules
-```
+## BoilerPlate
 
-- in /PI_countries `sudo docker build -t pi_countries .`
+El boilerplate cuenta con dos carpetas: `api` y `client`. En estas carpetas estará el código del back-end y el front-end respectivamente.
 
-- in /PI_countries/docker-compose.yml
-```yml
-version: "2.2"
-
-services:      
-        db:
-                image: "postgres:12"
-                ports:
-                        - "5432:5432"
-                environment:
-                        POSTGRES_USER: pi_countries
-                        POSTGRES_PASSWORD: 12345
-                        POSTGRES_DB: db_name_countries
-                volumes:
-                        - db:/var/lib/postgresql/data
-
-        src:
-                container_name: pi_countries
-                image: pi_countries
-                build:
-                        context: .
-                depends_on:
-                        - db
-                ports:
-                        - "3001:3001"
-                environment:
-                        DB_HOST: db
-                        DB_PORT: 5432
-                        DB_USER: pi_countries
-                        DB_PASSWORD: 12345
-                        DB_NAME: db_name_countries
-                links:
-                        - db
-                volumes:
-                        - ".:/PI_countrie"
-                        - "/PI_countrie/node_modules"
-volumes:
-        db: {}
+En `api` crear un archivo llamado: `.env` que tenga la siguiente forma:
 
 ```
-- in /PI_countries `sudo  docker-compose up --build`
-- in /PI_contries/src/routes/index.js
-```js
-const router = require('express').Router();
-const countries = require("./countries.js");
-const activity = require("./activity.js")
-
-
-
-router.use("/countries", countries);
-router.use("/activity", activity);
-
-module.exports = router;
-```
-- in /PI_contries/src/routes/activity.js
-```js
-const activity = require('../controllers/activity.js');
-const router = require('express').Router();
-
-router
-	.get('/', activity.getAll)
-	.get('/id',activity.getOne)
-	.post('/',activity.createOne);
-
-
-module.exports = router;
-
-```
-- in /PI_contries/src/routes/countries.js
-```js
-const countries = require('../controllers/countries.js');
-const router = require('express').Router();
-
-router
-        .get('/', countries.getAll)
-        .get('/id',countries.getOne)
-        .post('/',countries.createOne);
-
-
-module.exports = router;
-
-
-```
-- in /PI_countrie/src/controllers/activity.js
-```js
-const Activity = require('../models/activity.js');
-
-exports.getAll = async (req,res,next)=>{
-	try{
-		const ALL = await Activity.findAll();
-		return res.status(200).json(ALL);
-	}catch (error){
-		return res.status(500).json(error)
-	}
-}
-
-exports.getOne = async (req,res,next)=>{
-	try{
-		const ACTIVITY = await Activity.findByPk(req.params.id);
-		return res.status(200).json(ACTIVITY);
-	}catch (error){
-		return res.status(500).json(error);
-	}
-}
-
-exports.createOne = async (req,res,next)=>{
-	try{
-		const MODEL_ACTIVITY = {
-			name:req.body.name,
-                        difficulty:req.body.difficulty,
-                        duration:req.body.duration,
-                        season:req.body.season
-		}
-		try{
-			const ACTIVITY_CREATED = await Activity.create(MODEL_ACTIVITY);
-			console.log('console# user created',ACTIVITY_CREATED);
-			return res.status(201).json(ACTIVITY_CREATED);
-		}catch (error){
-		return res.status(500).json(error);
-		}
-	}catch (error){
-		return res.status(500).json(error)
-	}
-}
-```
-- in /PI_countrie/src/controllers/countries.js
-```js
-const Countries = require('../models/countries.js');
-
-exports.getAll = async (req,res,next)=>{
-        try{
-                const ALL = await Countries.findAll();
-                return res.status(200).json(ALL);
-        }catch (error){
-                return res.status(500).json(error)
-        }
-}
-exports.getOne = async (req,res,next)=>{
-        try{
-                const COUNTRIES = await Countries.findByPk(req.params.id);
-                return res.status(200).json(COUNTRIES);
-        }catch (error){
-                return res.status(500).json(error);
-        }
-}
-exports.createOne = async (req,res,next)=>{
-        try{
-                const MODEL_COUNTRIES = {
-                        username:req.body.username,
-                        email:req.body.email,
-                        password:req.body.password
-                }
-                try{
-                        const COUNTRIES_CREATED = await Countries.create(MODEL_COUNTRIES);
-                        console.log('console# user created',COUNTRIES_CREATED);
-                        return res.status(201).json(COUNTRIES_CREATED);
-                }catch (error){
-                return res.status(500).json(error);
-                }
-        }catch (error){
-                return res.status(500).json(error)
-        }
-}
-
-```
-- in /PI_countrie/src/models/activity.js
-```js
-const Sequelize = require('sequelize');
-const {conn} = require('../utils/db.js');
-
-const Activity = conn.define('activity',{
-    name: {
-      type: Sequelize.STRING,        
-    },
-    difficulty: {
-        type: Sequelize.ENUM('Realy Easy', 'Easy', 'meddium', 'Hard','Realy Hard')
-    },
-    duration: {
-        type: Sequelize.STRING
-    },
-    season: {
-        type: Sequelize.ENUM("Summer", "Autumn", "Winter", "Spring")
-    }
-});
-module.exports = Activity;
-```
-- in /PI_countrie/src/models/countries.js
-```js
-const Sequelize = require('sequelize');
-const {conn} = require('../utils/db.js');
-
-const Countries = conn.define('countries',{
-    id: { 
-      type: Sequelize.INTERGER,
-      autoIncrement:true,
-      primaryKey: true,
-      allowNull: false,      
-    },  
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false, 
-      unique: false,
-    },
-    flag: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    continent: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    capital: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    subregion: {
-      type: Sequelize.STRING,
-    }, 
-    area: {
-      type: Sequelize.INTEGER,
-    },
-    population: {
-      type: Sequelize.INTEGER,
-    }
-});
-module.exports = Countries;
-
-```
-in /PI_countrie/src/index.js
-```js
-const server = require('./app.js');
-const {conn} = require('./utils/db.js');
-const routes = require('./routes/index.js');
-
-
-server.use('/api', routes);
-
-( async ()=>{
-try{
-	await conn.sync({force:false});
-	console.log(`
-	# server ON 
-	http://localhost:3001/api/activity 	GET ON
-	http://localhost:3001/api/countries 	GET ON
-				    		GET ON
-				    		POST ON
-						PUT ON
-						DELETE off`);
-	app.listen(3001);
-}catch (error){
-	console.error(error)
-}
-})()
+DB_USER=usuariodepostgres
+DB_PASSWORD=passwordDePostgres
+DB_HOST=localhost
 ```
 
-- in /PI_countries `sudo  docker-compose up --build`
-- esto ya deberia conectar y correr normal en las rutas
+Reemplazar `usuariodepostgres` y `passwordDePostgres` con tus propias credenciales para conectarte a postgres. Este archivo va ser ignorado en la subida a github, ya que contiene información sensible (las credenciales).
+
+Adicionalmente será necesario que creen desde psql una base de datos llamada `countries`
+
+El contenido de `client` fue creado usando: Create React App.
+
+## Enunciado
+
+La idea general es crear una aplicación en la cual se pueda ver información de  distintos paises utilizando la api externa [restcountries](https://restcountries.com/) y a partir de ella poder, entre otras cosas:
+
+  - Buscar paises
+  - Filtrarlos / Ordenarlos
+  - Crear actividades turísticas
+
+__IMPORTANTE__: Para las funcionalidades de filtrado y ordenamiento NO pueden utilizar los endpoints de la API externa que ya devuelven los resultados filtrados u ordenados sino que deben realizarlo ustedes mismos. En particular alguno de los ordenamientos o filtrados debe si o si realizarse desde el frontend.
+
+### Únicos Endpoints/Flags que pueden utilizar
+
+  - GET https://restcountries.com/v3/all
+  - GET https://restcountries.com/v3/name/{name}
+  - GET https://restcountries.com/v3/alpha/{code}
+
+### Requerimientos mínimos:
+
+A continuación se detallaran los requerimientos mínimos para la aprobación del proyecto individial. Aquellos que deseen agregar más funcionalidades podrán hacerlo. En cuanto al diseño visual no va a haber wireframes ni prototipos prefijados sino que tendrán libertad de hacerlo a su gusto pero tienen que aplicar los conocimientos de estilos vistos en el curso para que quede agradable a la vista.
+
+__IMPORTANTE__: No se permitirá utilizar librerías externas para aplicar estilos a la aplicación. Tendrán que utilizar CSS con algunas de las opciones que vimos en dicha clase (CSS puro, CSS Modules o Styled Components)
+
+#### Tecnologías necesarias:
+- [ ] React
+- [ ] Redux
+- [ ] Express
+- [ ] Sequelize - Postgres
+
+#### Frontend
+
+Se debe desarrollar una aplicación de React/Redux que contenga las siguientes pantallas/rutas.
+
+__Pagina inicial__: deben armar una landing page con
+- [ ] Alguna imagen de fondo representativa al proyecto
+- [ ] Botón para ingresar al home (`Ruta principal`)
+
+__Ruta principal__: debe contener
+- [ ] Input de búsqueda para encontrar países por nombre
+- [ ] Área donde s verá el listado de países. Al iniciar deberá cargar los primeros resultados obtenidos desde la ruta `GET /countries` y deberá mostrar su:
+  - Imagen de la bandera
+  - Nombre
+  - Continente
+- [ ] Botones/Opciones para filtrar por continente y por tipo de actividad turística
+- [ ] Botones/Opciones para ordenar tanto ascendentemente como descendentemente los países por orden alfabético y por cantidad de población
+- [ ] Paginado para ir buscando y mostrando los siguientes paises, 10 paises por pagina, mostrando los primeros 9 en la primer pagina.
+
+__Ruta de detalle de país__: debe contener
+- [ ] Los campos mostrados en la ruta principal para cada país (imagen de la bandera, nombre, código de país de 3 letras y continente)
+- [ ] Código de país de 3 letras (id)
+- [ ] Capital
+- [ ] Subregión
+- [ ] Área (Mostrarla en km2 o millones de km2)
+- [ ] Población
+- [ ] Actividades turísticas con toda su información asociada
+
+__Ruta de creación de actividad turística__: debe contener
+- [ ] Un formulario __controlado__ con los siguientes campos
+  - Nombre
+  - Dificultad
+  - Duración
+  - Temporada
+- [ ] Posibilidad de seleccionar/agregar varios países en simultaneo
+- [ ] Botón/Opción para crear una nueva actividad turística
+
+#### Base de datos
+
+El modelo de la base de datos deberá tener las siguientes entidades (Aquellas propiedades marcadas con asterísco deben ser obligatorias):
+
+- [ ] País con las siguientes propiedades:
+  - ID (Código de 3 letras) *
+  - Nombre *
+  - Imagen de la bandera *
+  - Continente *
+  - Capital *
+  - Subregión
+  - Área
+  - Población
+- [ ] Actividad Turística con las siguientes propiedades:
+  - ID
+  - Nombre
+  - Dificultad (Entre 1 y 5)
+  - Duración
+  - Temporada (Verano, Otoño, Invierno o Primavera)
+
+La relación entre ambas entidades debe ser de muchos a muchos ya que un país puede contener varias actividades turísticas y, a su vez, una actividad turística puede darse en múltiples países. Por ejemplo una actividad podría ser "Ski" que podría ocurrir en Argentina y también en Estados Unidos, pero a su vez Argentina podría también incluir "Rafting".
+
+#### Backend
+
+Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
+
+__IMPORTANTE__: No está permitido utilizar los filtrados, ordenamientos y paginados brindados por la API externa, todas estas funcionalidades tienen que implementarlas ustedes.
+
+- [ ] __GET /countries__:
+  - En una primera instancia deberán traer todos los países desde restcountries y guardarlos en su propia base de datos y luego ya utilizarlos desde allí (Debe almacenar solo los datos necesarios para la ruta principal)
+  - Obtener un listado de los paises.
+- [ ] __GET /countries/{idPais}__:
+  - Obtener el detalle de un país en particular
+  - Debe traer solo los datos pedidos en la ruta de detalle de país
+  - Incluir los datos de las actividades turísticas correspondientes
+- [ ] __GET /countries?name="..."__:
+  - Obtener los países que coincidan con el nombre pasado como query parameter (No necesariamente tiene que ser una matcheo exacto)
+  - Si no existe ningún país mostrar un mensaje adecuado
+- [ ] __POST /activity__:
+  - Recibe los datos recolectados desde el formulario controlado de la ruta de creación de actividad turística por body
+  - Crea una actividad turística en la base de datos
+
+
+#### Testing
+- [ ] Al menos tener un componente del frontend con sus tests respectivos
+- [ ] Al menos tener una ruta del backend con sus tests respectivos
+- [ ] Al menos tener un modelo de la base de datos con sus tests respectivos
+e
