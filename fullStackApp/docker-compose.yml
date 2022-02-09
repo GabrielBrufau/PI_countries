@@ -1,0 +1,52 @@
+version: "3"
+
+services:      
+        db:
+                image: "postgres:12"
+                ports:
+                        - "5432:5432"
+                networks:
+                        - mern-app
+                environment:
+                        POSTGRES_USER: pi_countries
+                        POSTGRES_PASSWORD: 12345
+                        POSTGRES_DB: db_name_countries
+                volumes:
+                        - db:/var/lib/postgresql/data
+    
+        backend:
+                container_name: backend
+                image: backend
+                build:
+                        context: .
+                depends_on:
+                        - db
+                ports:
+                        - "3001:3001"
+                networks:
+                        - mern-app
+                environment:
+                        DB_HOST: db
+                        DB_PORT: 5432
+                        DB_USER: pi_countries
+                        DB_PASSWORD: 12345
+                        DB_NAME: db_name_countries
+                links:
+                        - db
+                volumes:
+                        - ".:/PI_countrie"
+                        - "/PI_countrie/node_modules"
+        frondend:
+                container_name: frondend
+                image: frondend
+                build:
+                        context: ./frond
+                ports:
+                        - "3000:3000"
+                networks:
+                        - mern-app
+networks:
+        mern-app:
+                driver: bridge
+volumes:
+        db: {}
