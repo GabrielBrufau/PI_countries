@@ -40,7 +40,7 @@ services:
                 container_name: frondend
                 image: frondend
                 build:
-                        context: ./frond
+                        context: ./frondend
                 ports:
                         - "3000:3000"
                 networks:

@@ -370,21 +370,27 @@ in fullStackApp/frondend/package.json
   "name": "frond",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
+  "dependencies":{
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
     "web-vitals": "^2.1.4"
-  },
-  "scripts": {
+    },
+    scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
+    },
  "eslintConfig": {
     "extends": [
       "react-app",
@@ -479,4 +485,8 @@ volumes:
 
 ```
 
+- in in fullStackApp/src `mkdir components redux cssRoot` `touch app.js index.js`
+- in fullStackApp/src/index.js
+```js
 
+```

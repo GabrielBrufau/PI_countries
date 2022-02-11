@@ -1,12 +1,20 @@
+//react
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+//redux
+import {Provider} from 'react-redux'; //esencial sin esto no funciona redux
+import {store} from './redux/store.js'//esencial sin esto no funciona redux
+//dir
+import './cssRoot/index.css';
+import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+	<Provider store={store}>
+		<h1>index</h1>
+		<App />
+	</Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
