@@ -1,0 +1,15 @@
+
+.landing{
+	justify-content:center;
+        align-items:center;
+        padding:0;
+        display:flex;
+        height:auto;
+	background-color:grey;
+	background-image:url('https://i.pinimg.com/originals/0a/ac/8b/0aac8bcba9b32977c1b29c477eb9fd54.jpg');
+ 	background-repeat: no-repeat;
+	padding-bottom:100%;
+	background-position: center center;
+	background-attachment:fixed;
+	background-size:cover;
+}

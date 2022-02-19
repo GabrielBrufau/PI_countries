@@ -10,12 +10,11 @@ import App from './App.js';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-	<Provider store={store}>
-		<h1>index</h1>
+  			<React.StrictMode>
+				<Provider store={store}>
 		<App />
-	</Provider>
-  </React.StrictMode>,
+				</Provider>
+  			</React.StrictMode>,
   document.getElementById('root')
 );
 

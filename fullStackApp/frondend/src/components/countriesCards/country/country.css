@@ -1,0 +1,11 @@
+.country{
+	height:auto;
+	width:auto;
+	margin:0;
+        padding:0;
+	color:#ffd700;
+}
+.country img{
+	height:50px;
+        width:50px;
+}

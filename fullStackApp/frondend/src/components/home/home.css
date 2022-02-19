@@ -1,0 +1,24 @@
+.home{
+	flex-direction: column;
+	padding:30px;
+        display:flex;
+        height:auto;
+	background-color:grey;
+	background-image:url('https://i.pinimg.com/originals/0a/ac/8b/0aac8bcba9b32977c1b29c477eb9fd54.jpg');
+ 	background-attachment:fixed;
+        background-size:cover;
+	height:auto;
+	min-height:100vh;
+	background-repeat: no-repeat;
+        background-position: center center;
+}
+.continent{
+        padding:0px;
+        display:flex;
+	flex-wrap: wrap;
+        height:auto;
+	width:auto;
+}
+
+
+

@@ -1,30 +1,34 @@
 import React, { useEffect } from 'react';
-import Country from '../country/Country.js';
 import {useSelector, useDispatch} from 'react-redux';
 import {countriesGetAll} from '../../../redux/actions.js';
 
+
+import Country from '../country/Country.js';
+import BottomNeon from '../../utils/bottomNeon/BottomNeon.js'
+
+
 export default function Countries(props) {
+	
 	const dispatch = useDispatch();
         const countries = useSelector(state=>state.countries);
 
-	console.log('initialstate se actualiza cuando uso useEffect',countries)	//#fix
-	console.log('useEffect dispach',dispatch) //#fix
+	console.log('#fixfrond 1 initialstate se actualiza cuando uso useEffect',countries)	//#fix
+	console.log('#fixfrond 2 useEffect',dispatch) //#fix
  	useEffect(()=>{
                 dispatch(countriesGetAll(dispatch));
-        },[dispatch]);   	
-	console.log('countries.length',countries.length) //#fix
+        },[dispatch]); 
+	
 	return (
              	<div>
-             	 <h1>React.Component Countries</h1>
-		 <Country/>
-                 {true && countries.map(country=>{
+		 	<BottomNeon text="Details"/>
+	        	{true && countries.map(country=>{
 		 			return (
 						<Country
-							name={country.countries.name}
+							name={country.name}
 						/>
 		 			)
-		 	  })
-		 }
+		 	})}
+	
 		</div>
         );
 
