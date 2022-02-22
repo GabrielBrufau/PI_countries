@@ -12,7 +12,9 @@ export const TYPE_GET_COUNTRIES="GET_COUNTRIES";
 export const FILTER_PER_CONTINENT="FILTER_PER_CONTINENT";
 export const FITTER_PER_PAGE_NEXT="FITTER_PER_PAGE_NEXT";
 export const FITTER_PER_PAGE_PREVIOUS="FITTER_PER_PAGE_PREVIOUS";
-export const FILTER_PER_STRING = "FILTER_PER_STRING"
+export const FILTER_PER_STRING = "FILTER_PER_STRING";
+export const FILTER_FROM_A_TO_Z = "FILTER_FROM_A_TO_Z";
+export const FILTER_FROM_Z_TO_A = "FILTER_FROM_Z_TO_A";
 export const RUTA_COUNTRIES="http://localhost:3001/api/countries";
 	
 export function countriesGetAll(dispatch) {
@@ -51,4 +53,16 @@ export function filtrarSearchPerString(dispatch,e){
 		type:FILTER_PER_STRING,
 		payload:e
 	});
+};
+
+export function filterFromAtoZ(dispatch){
+	return dispatch({
+		type:FILTER_FROM_A_TO_Z
+	});
+};
+
+export function filterFromZtoA(dispatch){
+        return dispatch({
+                type:FILTER_FROM_Z_TO_A
+        });
 };

@@ -12,13 +12,21 @@
 	background-repeat: no-repeat;
         background-position: center center;
 }
-.continent{
+.box_continent{
         padding:0px;
         display:flex;
 	flex-wrap: wrap;
+	font-size:30px;
         height:auto;
 	width:auto;
 }
-
-
+.box_additional_features{
+	background-color:blue;
+	padding:5px;
+        display:flex;
+        flex-wrap: wrap;
+        font-size:10px;
+        height:auto;
+        width:auto;
+}
 

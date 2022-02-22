@@ -4,7 +4,9 @@ import {countriesGetAll,
 	filterPerContinent,
 	filterPerPageNext,
 	filterPerPagePrevious,
-	filtrarSearchPerString
+	filtrarSearchPerString,
+	filterFromAtoZ,
+	filterFromZtoA
 } from '../../redux/actions.js';
 import Country from '../countriesCards/country/Country.js';
 import Input from '../utils/input/Input.js'
@@ -29,6 +31,8 @@ console.log('#fixfrond 3 countries',countries,'activities',activities,"allSearch
 React.useEffect(()=>{
 	dispatch(countriesGetAll(dispatch))
 },[dispatch]);
+
+console.log('#fixfrond 4 countries',countries,'activities',activities,"allSearch",allSearch)
 
 	function handleChangeSearchPerString(e){
 		setSearch(e.target.value)
@@ -59,6 +63,12 @@ React.useEffect(()=>{
                          dispatch(filterPerPageNext(dispatch,10));
                  };
         };
+	function handleFilterFromAtoZ(){
+		dispatch(filterFromAtoZ(dispatch));
+	}
+	function handleFilterFromZtoA(){
+		dispatch(filterFromZtoA(dispatch));
+	}
 
 	return (
 		<div className="home">
@@ -67,16 +77,25 @@ React.useEffect(()=>{
                                         placeholder="search per name"
                                         onChange={handleChangeSearchPerString}
                                 />
-		
-			<div className="continent">
+			<div className="box_additional_features">
 					<BottomNeon
                                         text="<<"
                                         onClick={handleFilterPerPagePrevious}
-                                	/>
-					<BottomNeon
+                                        />
+                                        <BottomNeon
                                         text=">>"
                                         onClick={handleFilterPerPageNext}
-                                	/>
+                                        />
+					<BottomNeon
+					text="A - Z"
+					onClick={handleFilterFromAtoZ}
+					/>
+					<BottomNeon
+					text="Z - A"
+					onClick={handleFilterFromZtoA}
+					/>
+			</div>
+			<div className="box_continent">
 					<BottomNeon
                                         	text="Africa"
                                         	onClick={()=>handleFilterPerContinent("Africa")}
@@ -104,7 +123,7 @@ React.useEffect(()=>{
                                         />
 
 			</div>
-			
+			<div className="box_additional_features">
 			{allSearch && allSearch.map(country=>{
                                 return (
 
@@ -112,31 +131,14 @@ React.useEffect(()=>{
 						<div className="continent">
                                                         <BottomNeon 
                                                           text={country.name}
-                                                          
+                                                          flag={country.flag}
+							  continent= {country.continent}
                                                         />
 						</div>
                                                 </>
                                         )
-                        })};
-
-			
-                	 {countries && countries.map(country=>{
-                                return (
-						<>
-							<BottomNeon 
-							  text={country.name}
-							  
-							/>
-                                                        <Country
-                                                	  name={country.name}
-							  flag={country.flag}
-							  continent={country.continent}
-                                                	/>
-						</>
-                                        )
-                        })};
-		
-			
+                        })}
+			</div>
 		</div>
 	);
 };

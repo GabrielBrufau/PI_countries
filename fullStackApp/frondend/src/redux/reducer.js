@@ -4,7 +4,9 @@ import {
 	FILTER_PER_CONTINENT,
 	FITTER_PER_PAGE_NEXT,
 	FITTER_PER_PAGE_PREVIOUS,
-	FILTER_PER_STRING
+	FILTER_PER_STRING,
+	FILTER_FROM_A_TO_Z,
+	FILTER_FROM_Z_TO_A
 } from './actions.js';
 
 export default function rootReducer( state = initialState ,action){
@@ -74,6 +76,24 @@ export default function rootReducer( state = initialState ,action){
 					...state,
 					allSearch:aux5
 				};
+
+			case 	FILTER_FROM_A_TO_Z:
+				const countriesFromAtoZ = state
+							   .countries
+							   .sort((a,b)=> a.name.localeCompare(b.name));
+				return {
+					...state,
+					allSearch:countriesFromAtoZ
+				}
+
+			case FILTER_FROM_Z_TO_A:
+				const countriesFromZtoA = state
+							  .countries
+							  .sort((a,b)=>b.name.localeCompare(a.name));
+				return {
+					...state,
+					allSearch:countriesFromZtoA
+				}
 			default:
 				return state
 		};
