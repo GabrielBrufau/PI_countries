@@ -1,0 +1,10 @@
+.card { 
+	display:grid;
+	grid-template-columns:50% 50%;
+	background:blue;
+	padding:1em;
+}
+
+.card div{
+	padding:1em;
+}

@@ -6,7 +6,9 @@ import {
 	FITTER_PER_PAGE_PREVIOUS,
 	FILTER_PER_STRING,
 	FILTER_FROM_A_TO_Z,
-	FILTER_FROM_Z_TO_A
+	FILTER_FROM_Z_TO_A,
+	FILTER_HIGHER_POPULATION,
+	FILTER_LESS_POPULATION
 } from './actions.js';
 
 export default function rootReducer( state = initialState ,action){
@@ -93,6 +95,24 @@ export default function rootReducer( state = initialState ,action){
 				return {
 					...state,
 					allSearch:countriesFromZtoA
+				}
+
+			case FILTER_HIGHER_POPULATION:
+				const countriesHigherPopulation = state
+								.countries
+								.sort((a,b)=>b.population - a.population)
+				return {
+					...state,
+					allSearch:countriesHigherPopulation
+				}
+
+			case FILTER_LESS_POPULATION:
+				const countriesLessPopulation = state
+								.countries
+								.sort((a,b)=>a.population - b.population)
+				return {
+					...state,
+					allSearch:countriesLessPopulation
 				}
 			default:
 				return state

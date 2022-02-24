@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux';
 import {countriesGetAll,
 	filterPerContinent,
@@ -6,7 +7,9 @@ import {countriesGetAll,
 	filterPerPagePrevious,
 	filtrarSearchPerString,
 	filterFromAtoZ,
-	filterFromZtoA
+	filterFromZtoA,
+	filterLessPupulation,
+	filterHigherPopulation
 } from '../../redux/actions.js';
 import Country from '../countriesCards/country/Country.js';
 import Input from '../utils/input/Input.js'
@@ -25,7 +28,7 @@ export default function Home(){
 //react
         const [search,setSearch]=React.useState("");
 
-        const [countryFind,setCountryFind]=React.useState([]);
+        const [countryFind,setCountryFind]=React.useState("");
 console.log('#fixfrond 3 countries',countries,'activities',activities,"allSearch",allSearch)
 
 React.useEffect(()=>{
@@ -35,15 +38,18 @@ React.useEffect(()=>{
 console.log('#fixfrond 4 countries',countries,'activities',activities,"allSearch",allSearch)
 
 	function handleChangeSearchPerString(e){
+		setCountryFind("");
 		setSearch(e.target.value)
                 console.log('Search',search);
                 dispatch(filtrarSearchPerString(dispatch,search));
 	};
 	function handleFilterPerContinent(e){
+		setCountryFind("");
 		console.log('#fix 14 Search',e);
                 dispatch(filterPerContinent(dispatch,e));
         };
 	function handleFilterPerPageNext(){
+		setCountryFind("");
         	const page = currentPage;
         	if(page > 0){
         	console.log('#fix 9 page>0',page);
@@ -54,6 +60,7 @@ console.log('#fixfrond 4 countries',countries,'activities',activities,"allSearch
 		};
 	};
 	function handleFilterPerPagePrevious(){
+		setCountryFind("");
                  const page = currentPage;
                  if(page > 0){
                  console.log('#fix 9 page>0',page);
@@ -64,12 +71,21 @@ console.log('#fixfrond 4 countries',countries,'activities',activities,"allSearch
                  };
         };
 	function handleFilterFromAtoZ(){
+		setCountryFind("A-Z");
 		dispatch(filterFromAtoZ(dispatch));
 	}
 	function handleFilterFromZtoA(){
+		setCountryFind("Z-A");
 		dispatch(filterFromZtoA(dispatch));
 	}
-
+	function handleFilterHigherPopulation(){
+		setCountryFind("Higher population");
+		dispatch(filterHigherPopulation());
+	};
+	function handleFilterLessPopulation(){
+		setCountryFind("Less population");
+		dispatch(filterLessPupulation());
+	};
 	return (
 		<div className="home">
 				<Input 
@@ -94,6 +110,15 @@ console.log('#fixfrond 4 countries',countries,'activities',activities,"allSearch
 					text="Z - A"
 					onClick={handleFilterFromZtoA}
 					/>
+					<BottomNeon
+                                        text="Less population"
+                                        onClick={handleFilterLessPopulation}
+                                        />
+					<BottomNeon
+                                        text="Higher population"
+                                        onClick={handleFilterHigherPopulation}
+                                        />
+
 			</div>
 			<div className="box_continent">
 					<BottomNeon
@@ -124,16 +149,22 @@ console.log('#fixfrond 4 countries',countries,'activities',activities,"allSearch
 
 			</div>
 			<div className="box_additional_features">
+			{countryFind && <BottomNeon
+                                        text={countryFind}
+                                        />}
 			{allSearch && allSearch.map(country=>{
+				const homeId="/home/"+country.id
                                 return (
 
                                                 <>
 						<div className="continent">
+							<Link to={homeId}>
                                                         <BottomNeon 
                                                           text={country.name}
                                                           flag={country.flag}
 							  continent= {country.continent}
                                                         />
+							</Link>
 						</div>
                                                 </>
                                         )
